@@ -161,8 +161,7 @@ if (!empty($_POST)) {
     //         } else {
 
     //             $photo_db = $_FILES['photo']['name'];
-    //             $photo_db = substr($photo_db, 0, 5);
-    //             $photo_db = $photo_db . rand(1, 9999) . "." . $extension_upload;
+    //             $photo_db = $photo_db . "." . $extension_upload;
 
     //             $file_tmp_name = $_FILES['photo']['tmp_name'];
     //             $file_dest = 'photo/' . $photo_db;
