@@ -5,7 +5,7 @@ require 'db.php';
 
 $error = '';
 
-if ($_POST) {
+if (!empty($_POST)) {
 
     // var_dump($_FILES);
     // $photo_db = 'default.jpg';   photo par défaut
@@ -32,7 +32,7 @@ if ($_POST) {
         }
     }
     // Vérif surface
-    if (empty($_POST["surface"])) {
+    if (empty( $_POST["surface"] )) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner une surface</div>';
     }
     // Vérif prix
@@ -134,6 +134,7 @@ include('partials/_header.php');
             <option value="vente" class="form-control">Vente</option>
         </select><br>
 
+        
         <label for="description">Description</label>
         <textarea name="description" id="description" cols="20" rows="5" class="form-control" placeholder="Veuillez saisir une description ..."></textarea><br>
 
