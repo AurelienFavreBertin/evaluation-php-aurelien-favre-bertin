@@ -8,7 +8,8 @@ $error = '';
 if (!empty($_POST)) {
 
     // var_dump($_FILES);
-    // $photo_db = 'default.jpg';   photo par défaut
+    $photo_db = 'default.jpg';   // photo par défaut
+
 
     // Vérif titre
     if (empty($_POST["titre"])) {
@@ -30,6 +31,9 @@ if (!empty($_POST)) {
     }
     if (strlen($_POST['ville']) > 150) {
         $error .= '<div class="alert alert-danger">Le nom de la ville est trop long</div>';
+    }
+    if (ctype_alpha($_POST['ville']) == false) {
+        $error .= '<div class="alert alert-danger">Le nom de la ville doit être uniquement en lettre</div>';
     }
     // Vérif cp
     if (empty($_POST["cp"])) {
@@ -58,7 +62,7 @@ if (!empty($_POST)) {
     if (empty($_POST["type"][0])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner un type de logement</div>';
     }
-    // fin des tests d'erreurs form
+    // fin des tests d'erreurs de champs du form
 
 
     if (empty($error) && !empty($_FILES['photo']['name'])  && ($_FILES['photo']['error']) == 0) {
@@ -82,9 +86,11 @@ if (!empty($_POST)) {
             $file_dest = 'photo/' . $photo_db;
 
             move_uploaded_file($file_tmp_name, $file_dest);
-            $error = '<div class="alert alert-success">Votre logement a bien été ajouté!</div>';
-        } // fin test photo
+        } 
 
+    } // fin test photo
+
+    if (empty($error)) {
 
         $request = 'INSERT INTO logement (titre, adresse, ville, cp, surface, type, description, prix, photo)
                     VALUES (:titre, :adresse, :ville, :cp, :surface, :type, :description, :prix, :photo)';
@@ -102,7 +108,10 @@ if (!empty($_POST)) {
             'prix' => $_POST['prix'],
             'photo' => $photo_db
         ]);
-    }
+
+
+        $error = '<div class="alert alert-success">Votre logement a bien été ajouté!</div>';
+    } // fin de l'insertion des données dans la DB
 } // fin de if $_post
 
 include('partials/_header.php');
@@ -122,28 +131,28 @@ include('partials/_header.php');
 
 
         <label for=" titre">Titre</label>
-        <input type="text" name="titre" id="titre" class="form-control" placeholder="Veuillez saisir un titre ..."><br>
+        <input type="text" name="titre" id="titre" class="form-control" placeholder="Veuillez saisir un titre ..." required><br>
 
         <label for="adresse">Adresse</label>
-        <input type="text" name="adresse" id="adresse" class="form-control" placeholder="Veuillez saisir une adresse ..."><br>
+        <input type="text" name="adresse" id="adresse" class="form-control" placeholder="Veuillez saisir une adresse ..." required><br>
 
         <label for="ville">Ville</label>
-        <input type="text" name="ville" id="ville" class="form-control" placeholder="Veuillez saisir une ville ..."><br>
+        <input type="text" name="ville" id="ville" class="form-control" placeholder="Veuillez saisir une ville ..." required><br>
 
         <label for="cp">Code Postal</label>
-        <input type="number" name="cp" id="cp" class="form-control" placeholder="Veuillez saisir un code postal ..."><br>
+        <input type="number" name="cp" id="cp" class="form-control" placeholder="Veuillez saisir un code postal ..." required><br>
 
         <label for="surface">Surface en m²</label>
-        <input type="number" name="surface" id="surface" class="form-control" placeholder="Veuillez saisir une surface en m² ..."><br>
+        <input type="number" name="surface" id="surface" class="form-control" placeholder="Veuillez saisir une surface ..." required><br>
 
         <label for="prix">Prix</label>
-        <input type="number" name="prix" id="prix" class="form-control" placeholder="Veuillez saisir un prix ..."><br>
+        <input type="number" name="prix" id="prix" class="form-control" placeholder="Veuillez saisir un prix ..." required><br>
 
         <label for="photo">Photo</label>
         <input type="file" name="photo" id="photo" class="form-control"><br>
 
         <label for="type">Type de logement</label>
-        <select name="type" id="type" class="form-control">
+        <select name="type" id="type" class="form-control" required>
             <option value="0" class="form-control">Veuillez choisir votre type de logement ...</option>
             <option value="location" class="form-control">Location</option>
             <option value="vente" class="form-control">Vente</option>

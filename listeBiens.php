@@ -49,7 +49,7 @@ include('partials/_header.php'); ?>
 			<td> <?= $logement['prix'] ?> </td>
 			<td> <?= $texte ?> </td>
 			<td><img class="w-50" src="photo/<?= $logement['photo'] ?>" alt="logement"></td>
-			<td style="white-space: nowrap;"><a href="#?<?= $logement['id']; ?>">Plus d'infos</a> </td>
+			<td style="white-space: nowrap;"><a href="#?<?= $logement['id_logement']; ?>">Plus d'infos</a> </td>
 		</tr>
 
 	<?php endforeach; ?>
