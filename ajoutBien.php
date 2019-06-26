@@ -14,13 +14,22 @@ if (!empty($_POST)) {
     if (empty($_POST["titre"])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner un titre</div>';
     }
+    if (strlen($_POST['titre']) > 150) {
+        $error .= '<div class="alert alert-danger">Le titre est trop long</div>';
+    }
     // Vérif adresse
     if (empty($_POST["adresse"])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner une adresse</div>';
     }
+    if (strlen($_POST['adresse']) > 255) {
+        $error .= '<div class="alert alert-danger">L\'adresse est trop longue</div>';
+    }
     // Vérif ville
     if (empty($_POST["ville"])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner une ville</div>';
+    }
+    if (strlen($_POST['ville']) > 150) {
+        $error .= '<div class="alert alert-danger">Le nom de la ville est trop long</div>';
     }
     // Vérif cp
     if (empty($_POST["cp"])) {
@@ -32,12 +41,18 @@ if (!empty($_POST)) {
         }
     }
     // Vérif surface
-    if (empty( $_POST["surface"] )) {
+    if (empty($_POST["surface"])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner une surface</div>';
+    }
+    if (!is_numeric($_POST['surface'])) {
+        $error .= '<div class="alert alert-danger">La surface n\'est pas un nombre</div>';
     }
     // Vérif prix
     if (empty($_POST["prix"])) {
         $error .= '<div class="alert alert-danger">Veuillez renseigner un prix</div>';
+    }
+    if (!is_numeric($_POST['prix'])) {
+        $error .= '<div class="alert alert-danger">Le prix n\'est pas un nombre</div>';
     }
     // Vérif type
     if (empty($_POST["type"][0])) {
@@ -134,7 +149,7 @@ include('partials/_header.php');
             <option value="vente" class="form-control">Vente</option>
         </select><br>
 
-        
+
         <label for="description">Description</label>
         <textarea name="description" id="description" cols="20" rows="5" class="form-control" placeholder="Veuillez saisir une description ..."></textarea><br>
 
