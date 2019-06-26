@@ -18,8 +18,8 @@ include('partials/_header.php'); ?>
 <table class="table">
 	<?php foreach ($logements as $logement) :
 
-		if (strlen($logement['description']) > 250) {
-			$texte = substr($logement['description'], 0, 250) . "...";
+		if (strlen($logement['description']) > 150) {
+			$texte = substr($logement['description'], 0, 150) . "...";
 		} else {
 			$texte = $logement['description'];
 		}
