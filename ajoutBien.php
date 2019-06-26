@@ -1,6 +1,7 @@
 <?php
 
 require 'db.php';
+require 'helpers.php';
 
 
 $error = '';
@@ -77,17 +78,26 @@ if (!empty($_POST)) {
             $error .= '<div class="alert alert-danger">Veuillez choisir une photo au format JPG, JPEG, PNG ou GIF</div>';
         } else {
 
-            $photo_db = $_FILES['photo']['name'];
-            $photo_db = substr($photo_db, 0, 5);
-            $photo_db = $photo_db . rand(1, 9999) . "." . $extension_upload;
-
-
+            $photo_db_ancien = $_FILES['photo']['name'];
+            $photo_db_ancien = substr($photo_db_ancien, 0, 5);
+            $photo_db_ancien = $photo_db_ancien . rand(1, 9999);
+            $photo_db = $photo_db_ancien . "." . $extension_upload;
             $file_tmp_name = $_FILES['photo']['tmp_name'];
             $file_dest = 'photo/' . $photo_db;
 
-            move_uploaded_file($file_tmp_name, $file_dest);
-        } 
 
+
+            move_uploaded_file($file_tmp_name, $file_dest);
+
+            // partie miniature
+            $titreAncienneImage = $photo_db;  // Le nom de l'image de départ AVEC extension
+            $extension = $extension_upload;   // L'extension de départ
+            $dossierEnregistrement = "photo";   // Le dossier de stockage des images, sans "/" !!!
+            $titreNouvelleImage = $photo_db_ancien . '_300x300.' . $extension;   // Le nom de la nouvelle image AVEC extension
+
+            // Enfin, on appelle la fonction !
+            createMiniature($titreAncienneImage, $extension, $dossierEnregistrement, $titreNouvelleImage);
+        }
     } // fin test photo
 
     if (empty($error)) {
@@ -112,6 +122,67 @@ if (!empty($_POST)) {
 
         $error = '<div class="alert alert-success">Votre logement a bien été ajouté!</div>';
     } // fin de l'insertion des données dans la DB
+
+
+
+
+    // test du nom avec l'id mais ne fonctionne pas
+    // if (empty($error)) {
+
+    //     $request = 'INSERT INTO logement (titre, adresse, ville, cp, surface, type, description, prix, photo)
+    //                 VALUES (:titre, :adresse, :ville, :cp, :surface, :type, :description, :prix, :photo)';
+
+    //     $response = $db->prepare($request);
+
+    //     $response->execute([
+    //         'titre' => $_POST['titre'],
+    //         'adresse' => $_POST['adresse'],
+    //         'ville' => $_POST['ville'],
+    //         'cp' => $_POST['cp'],
+    //         'surface' => $_POST['surface'],
+    //         'type' => $_POST['type'],
+    //         'description' => $_POST['description'],
+    //         'prix' => $_POST['prix'],
+    //         'photo' => $photo_db
+    //     ]);
+    //     $id = $db->lastInsertId();
+    //     $newName = photo_ . $id;
+
+    //     if (empty($error) && !empty($_FILES['photo']['name'])  && ($_FILES['photo']['error']) == 0) {
+
+    //         $infosfichier = pathinfo($_FILES['photo']['name']);
+    //         $extension_upload = $infosfichier['extension'];
+    //         $extensions_autorisees = array('jpg', 'jpeg', 'gif', 'png');
+
+    //         if ($_FILES['photo']['size'] > 2000000) {
+    //             $error .= '<div class="alert alert-danger">Veuillez choisir une photo de 2Mo max</div>';
+    //         } else if (!in_array($extension_upload, $extensions_autorisees)) {
+    //             $error .= '<div class="alert alert-danger">Veuillez choisir une photo au format JPG, JPEG, PNG ou GIF</div>';
+    //         } else {
+
+    //             $photo_db = $_FILES['photo']['name'];
+    //             $photo_db = substr($photo_db, 0, 5);
+    //             $photo_db = $photo_db . rand(1, 9999) . "." . $extension_upload;
+
+    //             $file_tmp_name = $_FILES['photo']['tmp_name'];
+    //             $file_dest = 'photo/' . $photo_db;
+
+
+
+    //             move_uploaded_file($file_tmp_name, "'photo/' . $newName . '.' $extension_upload");
+
+    //             $request = "UPDATE logement SET photo = :photo WHERE id_logement = :id";
+
+    //             $response = $db->prepare($request);
+
+    //             $response->execute([
+    //                 'id' => $id,
+    //                 'photo' => $file_tmp_name, "'photo/' . $newName . '.' $extension_upload"
+    //             ]);
+    //         }
+    //     } 
+
+
 } // fin de if $_post
 
 include('partials/_header.php');
